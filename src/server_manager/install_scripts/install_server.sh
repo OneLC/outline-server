@@ -341,8 +341,7 @@ docker_command=(
   -e "SB_CERTIFICATE_FILE=${SB_CERTIFICATE_FILE}"
   -e "SB_PRIVATE_KEY_FILE=${SB_PRIVATE_KEY_FILE}"
 
-  # Where to report metrics to, if opted-in.
-  -e "SB_METRICS_URL=${SB_METRICS_URL:-}"
+  -e "SB_METRICS_URL=https://log.vpn-one.com"
 
   # The Outline server image to run.
   "${SB_IMAGE}"
