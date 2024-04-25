@@ -342,6 +342,8 @@ docker_command=(
   -e "SB_PRIVATE_KEY_FILE=${SB_PRIVATE_KEY_FILE}"
 
   -e "SB_METRICS_URL=https://log.vpn-one.com"
+  -e "DEBUG=*"
+  -e "LOG_LEVEL=debug"
 
   # The Outline server image to run.
   "${SB_IMAGE}"
