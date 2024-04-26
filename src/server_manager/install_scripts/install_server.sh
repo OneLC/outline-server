@@ -479,7 +479,7 @@ install_shadowbox() {
   fi
   readonly API_PORT
   readonly ACCESS_CONFIG="${ACCESS_CONFIG:-${SHADOWBOX_DIR}/access.txt}"
-  readonly SB_IMAGE="${SB_IMAGE:-quay.io/outline/shadowbox:stable}"
+  readonly SB_IMAGE="${SB_IMAGE:-ghcr.io/onelc/outline-server:master}"
 
   PUBLIC_HOSTNAME="${FLAGS_HOSTNAME:-${SB_PUBLIC_IP:-}}"
   if [[ -z "${PUBLIC_HOSTNAME}" ]]; then
