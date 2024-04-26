@@ -55,7 +55,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       - name: Few init actions
         run: |
-          cp ${{ github.workspace }}/src/shadowbox/docker/cmd.sh ${{ github.workspace }}/
+          npx webpack --config='/src/shadowbox/webpack.config.js' --output-path='/'
 
 
       # Build and push Docker image with Buildx (don't push on PR)
