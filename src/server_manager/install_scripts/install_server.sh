@@ -294,7 +294,7 @@ function write_config() {
     config+=("\"portForNewAccessKeys\": ${FLAGS_KEYS_PORT}")
   fi
   if [[ -n "${SB_DEFAULT_SERVER_NAME:-}" ]]; then
-    config+=("\"name\": \"$(escape_json_string "${SB_DEFAULT_SERVER_NAME}")\"")   
+    config+=("\"name\": \"$(escape_json_string "${SB_DEFAULT_SERVER_NAME}")\"")
   fi
   config+=("\"hostname\": \"$(escape_json_string "${PUBLIC_HOSTNAME}")\"")
   echo "{$(join , "${config[@]}")}" > "${STATE_DIR}/shadowbox_server_config.json"
@@ -323,13 +323,13 @@ docker_command=(
 
   # Used by Watchtower to know which containers to monitor.
   --label 'com.centurylinklabs.watchtower.enable=true'
-  
+
   # Use log rotation. See https://docs.docker.com/config/containers/logging/configure/.
   --log-driver local
 
   # The state that is persisted across restarts.
   -v "${STATE_DIR}:${STATE_DIR}"
-    
+
   # Where the container keeps its persistent state.
   -e "SB_STATE_DIR=${STATE_DIR}"
 
@@ -531,11 +531,12 @@ install_shadowbox() {
   # require new dependencies.
   cat <<END_OF_SERVER_OUTPUT
 
-CONGRATULATIONS! Your Outline server is up and running.
+CONGRATULATIONS! Your OneVPN (outline) server is up and running.
 
-To manage your Outline server, please copy the following line (including curly
+To manage your OneVPN (outline) server, please copy the following line (including curly
 brackets) into Step 2 of the Outline Manager interface:
 
+$(echo -e "API: $(get_field_value apiUrl)")
 $(echo -e "\033[1;32m{\"apiUrl\":\"$(get_field_value apiUrl)\",\"certSha256\":\"$(get_field_value certSha256)\"}\033[0m")
 
 ${FIREWALL_STATUS}
@@ -556,7 +557,7 @@ function escape_json_string() {
       $'\\') escaped="\\\\";;
       *)
         if [[ "${char}" < $'\x20' ]]; then
-          case "${char}" in 
+          case "${char}" in
             $'\b') escaped="\\b";;
             $'\f') escaped="\\f";;
             $'\n') escaped="\\n";;
