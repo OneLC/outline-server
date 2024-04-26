@@ -24,7 +24,7 @@ tasks:
       - task: ':third_party:prometheus:copy-{{.TARGET_OS}}-{{.GOARCH}}'
         vars: {TARGET_DIR: '{{.BIN_DIR}}'}
       # Set CGO_ENABLED=0 to force static linkage. See https://mt165.co.uk/blog/static-link-go/.
-      - GOOS={{.TARGET_OS}} GOARCH={{.GOARCH}} CGO_ENABLED=0 go build -ldflags='-s -w -X main.version=embedded' -o '{{.BIN_DIR}}/' github.com/Jigsaw-Code/outline-ss-server/cmd/outline-ss-server
+      - GOOS={{.TARGET_OS}} GOARCH={{.GOARCH}} CGO_ENABLED=0 go build -ldflags='-s -w -X main.version=embedded' -o '{{.BIN_DIR}}/' github.com/OneLC/outline-ss-server/cmd/outline-ss-server
 
   start:
     desc: Run the Outline server locally
@@ -50,7 +50,7 @@ tasks:
       - echo "Using directory {{.RUN_DIR}}"
       - mkdir -p '{{.STATE_DIR}}'
       - echo '{"hostname":"127.0.0.1"}' > "{{.STATE_CONFIG}}"
-      - task: make_test_certificate 
+      - task: make_test_certificate
         vars: {OUTPUT_DIR: '{{.RUN_DIR}}'}
       - node '{{joinPath .OUTPUT_BASE .TARGET_OS .TARGET_ARCH "app/main.js"}}'
 
@@ -68,7 +68,7 @@ tasks:
           (dict
             "x86_64" "node@sha256:a0b787b0d53feacfa6d606fb555e0dbfebab30573277f1fe25148b05b66fa097"
             "arm64" "node@sha256:b4b7a1dd149c65ee6025956ac065a843b4409a62068bd2b0cbafbb30ca2fab3b"
-          ) .TARGET_ARCH                       
+          ) .TARGET_ARCH
         }}'
     env:
       DOCKER_CONTENT_TRUST: '{{.DOCKER_CONTENT_TRUST | default "1"}}'
@@ -114,7 +114,7 @@ tasks:
       - rm -rf '{{.RUN_DIR}}'
       - mkdir -p '{{.HOST_STATE_DIR}}'
       - echo '{"hostname":"127.0.0.1"}' > "{{.STATE_CONFIG}}"
-      - task: make_test_certificate 
+      - task: make_test_certificate
         vars: {OUTPUT_DIR: '{{.HOST_STATE_DIR}}'}
       - |
         docker_command=(
@@ -129,7 +129,7 @@ tasks:
           {{- end}}
 
           # Where the container keeps its persistent state.
-          -v "{{.HOST_STATE_DIR}}:{{.CONTAINER_STATE_DIR}}"            
+          -v "{{.HOST_STATE_DIR}}:{{.CONTAINER_STATE_DIR}}"
           -e "SB_STATE_DIR={{.CONTAINER_STATE_DIR}}"
 
           # Port number and path prefix used by the server manager API.
