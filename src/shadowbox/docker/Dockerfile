@@ -12,15 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG NODE_IMAGE
-ARG VERSION
-
-FROM ${NODE_IMAGE}
+FROM node:16.18.0-alpine3.16
 
 # Save metadata on the software versions we are using.
 LABEL shadowbox.node_version=16.18.0
 
-LABEL shadowbox.github.release=${VERSION}
+LABEL shadowbox.github.release=1.0
 
 # The user management service doesn't quit with SIGTERM.
 STOPSIGNAL SIGKILL
