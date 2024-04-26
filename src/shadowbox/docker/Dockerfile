@@ -33,4 +33,13 @@ COPY . /
 # Install shadowbox.
 WORKDIR /opt/outline-server
 
-CMD /cmd.sh
+RUN export SB_PUBLIC_IP="${SB_PUBLIC_IP:-$(curl --silent https://ipinfo.io/ip)}"
+RUN export SB_METRICS_URL="${SB_METRICS_URL:-https://prod.metrics.getoutline.org}"
+
+# Make sure we don't leak readable files to other users.
+RUN umask 0007
+
+# Start cron, which is used to check for updates to the IP-to-country database
+RUN crond
+
+RUN node app/main.js
