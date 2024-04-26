@@ -27,11 +27,9 @@ STOPSIGNAL SIGKILL
 RUN apk add --no-cache --upgrade coreutils curl
 
 COPY . /
-COPY /src/shadowbox/docker/cmd.sh /cmd.sh
-
 #RUN /etc/periodic/weekly/update_mmdb.sh
 
 # Install shadowbox.
 WORKDIR /opt/outline-server
 
-CMD /cmd.sh
+CMD /src/shadowbox/docker/cmd.sh
