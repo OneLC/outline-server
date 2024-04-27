@@ -28,7 +28,7 @@ RUN apk add --no-cache --upgrade coreutils curl
 COPY . /
 COPY /cmd.sh /
 
-RUN /etc/periodic/weekly/update_mmdb.sh
+#RUN /etc/periodic/weekly/update_mmdb.sh
 
 # Install shadowbox.
 WORKDIR /opt/outline-server
