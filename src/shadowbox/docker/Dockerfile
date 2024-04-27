@@ -15,9 +15,8 @@
 FROM node:16.18.0-alpine3.16
 
 # Save metadata on the software versions we are using.
-LABEL shadowbox.node_version=16.18.0
-
-LABEL shadowbox.github.release=1.0
+LABEL shadowbox.node_version=16.18.1
+LABEL shadowbox.github.release=1.1
 
 # The user management service doesn't quit with SIGTERM.
 STOPSIGNAL SIGKILL
