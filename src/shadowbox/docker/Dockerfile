@@ -15,8 +15,8 @@
 FROM node:16.18.0-alpine3.16
 
 # Save metadata on the software versions we are using.
-LABEL shadowbox.node_version=16.18.1
-LABEL shadowbox.github.release=1.1
+LABEL shadowbox.node_version=16.18.0
+LABEL shadowbox.github.release=1.0
 
 # The user management service doesn't quit with SIGTERM.
 STOPSIGNAL SIGKILL
@@ -26,15 +26,11 @@ STOPSIGNAL SIGKILL
 RUN apk add --no-cache --upgrade coreutils curl
 
 COPY . /
-#RUN /etc/periodic/weekly/update_mmdb.sh
+COPY /cmd.sh /
+
+RUN /etc/periodic/weekly/update_mmdb.sh
 
 # Install shadowbox.
 WORKDIR /opt/outline-server
 
-#CMD /cmd.sh
-RUN export SB_PUBLIC_IP="${SB_PUBLIC_IP:-$(curl --silent https://ipinfo.io/ip)}"
-RUN export SB_METRICS_URL="${SB_METRICS_URL:-https://prod.metrics.getoutline.org}"
-
-RUN umask 0007
-RUN crond
-RUN node app/main.js
+CMD /cmd.sh

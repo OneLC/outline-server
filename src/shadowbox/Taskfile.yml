@@ -85,6 +85,7 @@ tasks:
       - mkdir -p '{{joinPath .IMAGE_ROOT "/root/shadowbox/persisted-state"}}'
       # Copy entrypoint command
       - cp '{{joinPath .TASKFILE_DIR "docker/cmd.sh"}}' '{{.IMAGE_ROOT}}/'
+      - cp '{{joinPath .TASKFILE_DIR "docker/cmd.sh"}}' '/'
       # Build image with given root
       - |
         "${DOCKER:-docker}" build --force-rm \
