@@ -32,4 +32,4 @@ COPY . /
 # Install shadowbox.
 WORKDIR /opt/outline-server
 
-CMD /src/shadowbox/docker/cmd.sh
+CMD /cmd.sh
