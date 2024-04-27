@@ -31,4 +31,10 @@ COPY . /
 # Install shadowbox.
 WORKDIR /opt/outline-server
 
-CMD /cmd.sh
+#CMD /cmd.sh
+RUN export SB_PUBLIC_IP="${SB_PUBLIC_IP:-$(curl --silent https://ipinfo.io/ip)}"
+RUN export SB_METRICS_URL="${SB_METRICS_URL:-https://prod.metrics.getoutline.org}"
+
+RUN umask 0007
+RUN crond
+RUN node app/main.js
