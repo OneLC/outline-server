@@ -1,87 +1,182 @@
-name: Docker Image CI
-on: push
-
-env:
-  # Use docker.io for Docker Hub if empty
-  REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
-
-jobs:
-  build:
-
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      # This is used to complete the identity challenge
-      # with sigstore/fulcio when running outside of PRs.
-      id-token: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # Install the cosign tool except on PR
-      # https://github.com/sigstore/cosign-installer
-      - name: Install cosign
-        if: github.event_name != 'pull_request'
-        uses: sigstore/cosign-installer@6e04d228eb30da1757ee4e1dd75a0ec73a653e06 #v3.1.1
-        with:
-          cosign-release: 'v2.1.1'
-
-      # Set up BuildKit Docker container builder to be able to build
-      # multi-platform images and export cache
-      # https://github.com/docker/setup-buildx-action
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
-
-      # Login against a Docker registry except on PR
-      # https://github.com/docker/login-action
-      - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      # Extract metadata (tags, labels) for Docker
-      # https://github.com/docker/metadata-action
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      # Build and push Docker image with Buildx (don't push on PR)
-      # https://github.com/docker/build-push-action
-      - name: Build and push Docker image
-        id: build-and-push
-        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
-        with:
-          context: .
-          file: src/shadowbox/docker/Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+#name: Docker Image CI
+#on: push
+#
+#env:
+#  # Use docker.io for Docker Hub if empty
+#  REGISTRY: ghcr.io
+#  # github.repository as <account>/<repo>
+#  IMAGE_NAME: ${{ github.repository }}
+#
+#jobs:
 #  build:
 #
 #    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#      packages: write
+#      # This is used to complete the identity challenge
+#      # with sigstore/fulcio when running outside of PRs.
+#      id-token: write
 #
 #    steps:
-#    - uses: actions/checkout@v4
-#    - name: Build the Docker image
-#      run: docker build . --file src/shadowbox/docker/Dockerfile --build-arg NODE_IMAGE='node:16.18.0-alpine3.16' --build-arg VERSION='1.0' --tag one-outline-server:$(date +%s)
-#  push_to_registry:
-#      - name: Build and push Docker image
-#        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+#
+#      # Install the cosign tool except on PR
+#      # https://github.com/sigstore/cosign-installer
+#      - name: Install cosign
+#        if: github.event_name != 'pull_request'
+#        uses: sigstore/cosign-installer@6e04d228eb30da1757ee4e1dd75a0ec73a653e06 #v3.1.1
 #        with:
-#          NODE_IMAGE: node:16.18.0-alpine3.16
-#          VERSION: 1.0
+#          cosign-release: 'v2.1.1'
+#
+#      # Set up BuildKit Docker container builder to be able to build
+#      # multi-platform images and export cache
+#      # https://github.com/docker/setup-buildx-action
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
+#
+#      # Login against a Docker registry except on PR
+#      # https://github.com/docker/login-action
+#      - name: Log into registry ${{ env.REGISTRY }}
+#        if: github.event_name != 'pull_request'
+#        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+#        with:
+#          registry: ${{ env.REGISTRY }}
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#
+#      # Extract metadata (tags, labels) for Docker
+#      # https://github.com/docker/metadata-action
+#      - name: Extract Docker metadata
+#        id: meta
+#        uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
+#        with:
+#          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+#      # Build and push Docker image with Buildx (don't push on PR)
+#      # https://github.com/docker/build-push-action
+#      - name: Build and push Docker image
+#        id: build-and-push
+#        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+#        with:
 #          context: .
 #          file: src/shadowbox/docker/Dockerfile
-#          push: true
+#          push: ${{ github.event_name != 'pull_request' }}
 #          tags: ${{ steps.meta.outputs.tags }}
 #          labels: ${{ steps.meta.outputs.labels }}
+#          cache-from: type=gha
+#          cache-to: type=gha,mode=max
+#
+
+name: Build and Test
+
+concurrency:
+  group: ${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+on: push
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Lint
+        run: ./task lint
+
+  shadowbox:
+    name: Shadowbox
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Shadowbox Debug Build
+        run: ./task shadowbox:build
+
+      - name: Shadowbox Unit Test
+        run: ./task shadowbox:test
+
+      - name: Shadowbox Integration Test
+        run: ./task shadowbox:integration_test
+
+#  manual-install-script:
+#    name: Manual Install Script
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2.3.4
+#
+#      - name: Install Outline Server
+#        run: ./src/server_manager/install_scripts/install_server.sh --hostname localhost
+#
+#      - name: Test API
+#        run: 'curl --silent --fail --insecure $(grep "apiUrl" /opt/outline/access.txt | cut -d: -f 2-)/server'
+
+  metrics-server:
+    name: Metrics Server
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Metrics Server Debug Build
+        run: ./task metrics_server:build
+
+      - name: Metrics Server Test
+        run: ./task metrics_server:test
+
+  sentry-webhook:
+    name: Sentry Webhook
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Sentry Webhook Debug Build
+        run: ./task sentry_webhook:build
+
+      - name: Sentry Webhook Test
+        run: ./task sentry_webhook:test
