@@ -2,6 +2,8 @@ github.com/Jigsaw-Code/outline-sdk v0.0.14 h1:uJLvIne7YJNolbX7KDacd8gLidrUzRuweB
 github.com/Jigsaw-Code/outline-sdk v0.0.14/go.mod h1:9cEaF6sWWMzY8orcUI9pV5D0oFp2FZArTSyJiYtMQQs=
 github.com/Masterminds/semver/v3 v3.2.1 h1:RN9w6+7QoMeJVGyfmbcgs28Br8cvmnucEXnY0rYXWg0=
 github.com/Masterminds/semver/v3 v3.2.1/go.mod h1:qvl/7zhW3nngYb5+80sSMF+FG2BjYrf8m9wsX0PNOMQ=
+github.com/OneLC/outline-ss-server v0.0.0-20240426155151-29eaf914af38 h1:biDBhcJ0EuEVzWKyb24l3+kOyq5kdqP/2PVDFWIMWgQ=
+github.com/OneLC/outline-ss-server v0.0.0-20240426155151-29eaf914af38/go.mod h1:WZFjS3oTs99R6R+cG06omENcdmuhw05iEu5rNMs989Q=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
 github.com/cespare/xxhash/v2 v2.2.0 h1:DC2CZ1Ep5Y4k3ZQ899DldepgrayRUGE6BBZ/cd9Cj44=

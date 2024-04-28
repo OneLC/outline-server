@@ -3,7 +3,7 @@ module localhost
 go 1.21
 
 require (
-	github.com/Jigsaw-Code/outline-ss-server v1.0
+	github.com/OneLC/outline-ss-server v0.0.0-20240426155151-29eaf914af38
 	github.com/go-task/task/v3 v3.36.0
 )
 
