@@ -172,10 +172,9 @@ tasks:
     vars:
       OUTPUT_DIR: '{{joinPath .OUTPUT_BASE "image_test"}}'
     cmds:
-      - {{.DOCKER}} ps
       - rm -rf '{{.OUTPUT_DIR}}'
       - OUTPUT_DIR='{{.OUTPUT_DIR}}' '{{joinPath .TASKFILE_DIR "integration_test/test.sh"}}' '{{.IMAGE_NAME}}'
-
+      - {{.DOCKER}} ps
 
   test:
     desc: Run the unit tests for the Outline Server
