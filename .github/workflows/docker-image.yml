@@ -125,6 +125,7 @@ jobs:
       - name: Shadowbox Container Push
         run: |
           docker login ghcr.io -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
+          docker tag shadowbox ghcr.io/onelc/outline-server:latest
           docker push ghcr.io/onelc/outline-server:latest
 
 #  manual-install-script:
