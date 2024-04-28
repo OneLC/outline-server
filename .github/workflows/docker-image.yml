@@ -117,16 +117,21 @@ jobs:
         run: ./task shadowbox:build
 
       - name: Shadowbox Unit Test
-        run: ./task shadowbox:test
+        run: |
+          ./task shadowbox:test
 
       - name: Shadowbox Integration Test
-        run: ./task shadowbox:integration_test
-
-      - name: Shadowbox Container Push
         run: |
+          ./task shadowbox:integration_test
           docker login ghcr.io -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
-          docker tag shadowbox:1.0 ghcr.io/onelc/shadowbox
+          docker tag shadowbox:stable ghcr.io/onelc/shadowbox
           docker push ghcr.io/onelc/shadowbox
+
+#      - name: Shadowbox Container Push
+#        run: |
+#          docker login ghcr.io -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
+#          docker tag shadowbox:1.0 ghcr.io/onelc/shadowbox
+#          docker push ghcr.io/onelc/shadowbox
 
 #  manual-install-script:
 #    name: Manual Install Script
