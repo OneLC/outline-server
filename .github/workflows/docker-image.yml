@@ -125,7 +125,7 @@ jobs:
       - name: Shadowbox Container Push
         run: |
           docker login ghcr.io -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
-          docker push ghcr.io/OneLC/OneVPN_Server:latest
+          docker push ghcr.io/OneLC/outline-server:latest
 
 #  manual-install-script:
 #    name: Manual Install Script
