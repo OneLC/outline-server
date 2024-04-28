@@ -118,9 +118,14 @@ jobs:
 
       - name: Shadowbox Unit Test
         run: ./task shadowbox:test
-# fixme: fix it
-#      - name: Shadowbox Integration Test
-#        run: ./task shadowbox:integration_test
+
+      - name: Shadowbox Integration Test
+        run: ./task shadowbox:integration_test
+
+      - name: Shadowbox Container Push
+        run: |
+          docker login ghcr.io -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
+          docker push ghcr.io/OneLC/OneVPN_Server:latest
 
 #  manual-install-script:
 #    name: Manual Install Script
