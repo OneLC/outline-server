@@ -124,7 +124,7 @@ jobs:
           ./task shadowbox:docker:build
           docker ps
           docker login ghcr.io -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
-          docker tag shadowbox ghcr.io/onelc/outline-server
+          docker tag outline-server ghcr.io/onelc/outline-server
           docker push ghcr.io/onelc/outline-server
 
 #          ./task shadowbox:integration_test
