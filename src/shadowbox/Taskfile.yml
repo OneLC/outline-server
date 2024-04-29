@@ -85,7 +85,7 @@ tasks:
       - mkdir -p '{{joinPath .IMAGE_ROOT "/root/shadowbox/persisted-state"}}'
       # Copy entrypoint command
       - cp '{{joinPath .TASKFILE_DIR "docker/cmd.sh"}}' '{{.IMAGE_ROOT}}/'
-#      - cp '{{joinPath .TASKFILE_DIR "docker/cmd.sh"}}' '/'
+      #      - cp '{{joinPath .TASKFILE_DIR "docker/cmd.sh"}}' '/'
       # Build image with given root
       - |
         "${DOCKER:-docker}" build --force-rm \
@@ -159,11 +159,11 @@ tasks:
           IMAGE_NAME: localhost/outline/shadowbox:latest
           OUTPUT_DIR: '{{joinPath .OUTPUT_BASE "integration_test"}}'
 
-#  push:
-#    desc: Push to github
-#    cmds:
-#      - docker push ghcr.io/OneLC/OneVPN_Server:latest
-#
+  #  push:
+  #    desc: Push to github
+  #    cmds:
+  #      - docker push ghcr.io/OneLC/OneVPN_Server:latest
+  #
 
   test_image:
     desc: Test a specific image by name
@@ -174,7 +174,7 @@ tasks:
     cmds:
       - rm -rf '{{.OUTPUT_DIR}}'
       - OUTPUT_DIR='{{.OUTPUT_DIR}}' '{{joinPath .TASKFILE_DIR "integration_test/test.sh"}}' '{{.IMAGE_NAME}}'
-      - {{.DOCKER}} ps
+
 
   test:
     desc: Run the unit tests for the Outline Server
