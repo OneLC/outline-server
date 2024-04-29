@@ -99,6 +99,10 @@ jobs:
   shadowbox:
     name: Shadowbox
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     needs: lint
     steps:
       - name: Checkout
