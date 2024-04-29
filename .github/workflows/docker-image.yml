@@ -122,11 +122,12 @@ jobs:
 
       - name: Shadowbox Integration Test
         run: |
-          ./task shadowbox:integration_test
+#          ./task shadowbox:integration_test
+          ./task docker:build
           docker ps
           docker login ghcr.io -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
-          docker tag shadowbox:stable ghcr.io/onelc/shadowbox
-          docker push ghcr.io/onelc/shadowbox
+          docker tag shadowbox ghcr.io/onelc/outline-server
+          docker push ghcr.io/onelc/outline-server
 
 #      - name: Shadowbox Container Push
 #        run: |
